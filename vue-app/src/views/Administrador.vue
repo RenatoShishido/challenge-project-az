@@ -60,12 +60,24 @@
               ></v-textarea>
             </v-col>
             <v-col cols="12" class="d-flex justify-center">
-              <v-btn color="success" class="mr-4">
-                CADASTRAR
-              </v-btn>
-              <v-btn color="error" class="mr-4" @click="reset">
-                LIMPAR
-              </v-btn>
+              <Button
+                @defaultAction="cadastrarDoacao"
+                :typeButton="{
+                  color: 'success',
+                  text: 'CADASTRAR',
+                  class: 'mr-4 white--text',
+                  outlined: 'outlined',
+                }"
+              />
+              <Button
+                @defaultAction="cleanFields"
+                :typeButton="{
+                  color: 'red',
+                  text: 'LIMPAR',
+                  class: 'mr-4 white--text',
+                  outlined: 'outlined',
+                }"
+              />
             </v-col>
           </v-row>
         </v-col>
@@ -88,10 +100,12 @@
 
 <script>
 import Table from "../components/tabela";
+import Button from "../components/botao";
 export default {
   name: "Administrador",
   components: {
     Table,
+    Button,
   },
   data: () => ({
     fields: {},
@@ -100,10 +114,12 @@ export default {
       (v) => !!v || "E necessario preencher o campo",
       (v) => /.+@.+\..+/.test(v) || "Email deve ser valido",
     ],
-    telefoneRules: [
-      (v) => !!v || "E necessario preencher o campo",
-      (v) => /([0-9])\w+/g.test(v) || "Apenas numeros",
-    ],
+    telefoneRules: [(v) => /([0-9])\w+/g.test(v) || "Apenas numeros"],
   }),
+  methods: {
+    cleanFields() {
+      this.fields = {};
+    },
+  },
 };
 </script>

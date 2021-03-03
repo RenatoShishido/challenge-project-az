@@ -5,41 +5,73 @@
       :items-per-page.sync="itemsPerPage"
       :page.sync="page"
       :search="search"
-      :sort-by="sortBy.toLowerCase()"
-      :sort-desc="sortDesc"
       hide-default-footer
     >
       <template v-slot:header>
-        <v-toolbar dark color="grey darken-3" class="mb-1">
-          <v-text-field
-            v-model="search"
-            clearable
-            flat
-            solo-inverted
-            hide-details
-            prepend-inner-icon="mdi-magnify"
-            label="Search"
-          ></v-text-field>
-        </v-toolbar>
+        <v-text-field
+          v-model="search"
+          clearable
+          color="grey darken-3"
+          solo-inverted
+          hide-details
+          prepend-inner-icon="mdi-magnify"
+          label="Search"
+        ></v-text-field>
       </template>
 
-      <template >
-        <v-row>
+      <template>
+        <v-row class=" mt-4">
           <v-col cols="12">
             <thead>
               <tr>
-                <th class="text-left px-2 subheading font-weight-bold">
-                  Name
+                <th cols="2" class="text-left px-2 title font-weight-bold">
+                  Nome
                 </th>
-                <th class="text-left px-2 subheading font-weight-bold">
-                  Calories
+                <th cols="3" class="text-center px-2 title font-weight-bold">
+                  Email
+                </th>
+                <th cols="1" class="text-left px-2 title font-weight-bold">
+                  Utensilio
+                </th>
+                <th cols="5" class="text-left px-2 title font-weight-bold">
+                  Descricao
+                </th>
+                <th cols="5" class="text-left px-2 title font-weight-bold">
+                  Alterar
+                </th>
+                <th cols="5" class="text-left px-2 title font-weight-bold">
+                  Deletar
                 </th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in items" :key="item.name">
-                <td class="px-2">{{ item.name }}</td>
-                <td class="px-2">{{ item.calories }}</td>
+                <td cols="2" class="px-2">{{ item.name }}</td>
+                <td cols="3" class="px-2">{{ item.email }}</td>
+                <td cols="1" class="px-2">{{ item.utensilio }}</td>
+                <td cols="5" class="px-2">{{ item.descricao }}</td>
+                <td cols="5" class="px-2">
+                  <Button
+                    @defaultAction="cleanFields"
+                    :typeButton="{
+                      color: 'green',
+                      fab: 'fab',
+                      icon: 'mdi-pencil',
+                      outlined: 'outlined'
+                    }"
+                  />
+                </td>
+                <td cols="5" class="px-2">
+                  <Dialog
+                  :typeButton="{
+                      color: 'red',
+                      fab: 'fab',
+                      icon: 'mdi-delete',
+                      outlined: 'outlined'
+                    }"
+                  />
+
+                </td>
               </tr>
             </tbody>
           </v-col>
@@ -100,7 +132,13 @@
   </v-container>
 </template>
 <script>
+import Button from "./botao";
+import Dialog from "./dialog";
 export default {
+  components: {
+    Button,
+    Dialog
+  },
   data() {
     return {
       itemsPerPageArray: [4, 8, 12],
@@ -112,14 +150,58 @@ export default {
       sortBy: "name",
       items: [
         {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          sodium: 87,
-          calcium: "14%",
-          iron: "1%",
+          name: "Renato Tomio",
+          email: "renato.re2012@hotmail.com",
+          utensilio: "Panela de Pressao",
+          descricao: "Panela com pouco uso bem conservada pronta para usar",
+        },
+        {
+          name: "Renato Tomio",
+          email: "renato.re2012@hotmail.com",
+          utensilio: "Panela de Pressao",
+          descricao: "Panela com pouco uso bem conservada pronta para usar",
+        },
+        {
+          name: "Renato Tomio",
+          email: "renato.re2012@hotmail.com",
+          utensilio: "Panela de Pressao",
+          descricao: "Panela com pouco uso bem conservada pronta para usar",
+        },
+        {
+          name: "Renato Tomio",
+          email: "renato.re2012@hotmail.com",
+          utensilio: "Panela de Pressao",
+          descricao: "Panela com pouco uso bem conservada pronta para usar",
+        },
+        {
+          name: "Renato Tomio",
+          email: "renato.re2012@hotmail.com",
+          utensilio: "Panela de Pressao",
+          descricao: "Panela com pouco uso bem conservada pronta para usar",
+        },
+        {
+          name: "Renato Tomio",
+          email: "renato.re2012@hotmail.com",
+          utensilio: "Panela de Pressao",
+          descricao: "Panela com pouco uso bem conservada pronta para usar",
+        },
+        {
+          name: "Renato Tomio",
+          email: "renato.re2012@hotmail.com",
+          utensilio: "Panela de Pressao",
+          descricao: "Panela com pouco uso bem conservada pronta para usar",
+        },
+        {
+          name: "Renato Tomio",
+          email: "renato.re2012@hotmail.com",
+          utensilio: "Panela de Pressao",
+          descricao: "Panela com pouco uso bem conservada pronta para usar",
+        },
+        {
+          name: "Renato Tomio",
+          email: "renato.re2012@hotmail.com",
+          utensilio: "Panela de Pressao",
+          descricao: "Panela com pouco uso bem conservada pronta para usar",
         },
       ],
     };
