@@ -1,17 +1,20 @@
 package com.doacao.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
 
 @Entity
 public class Utensilio {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(nullable = false)
@@ -22,14 +25,7 @@ public class Utensilio {
 	
 	@Column(nullable = false)
 	private String email;
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
+	
 
 	@Override
 	public int hashCode() {
@@ -79,6 +75,23 @@ public class Utensilio {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	@Override
+	public String toString() {
+		return "Utensilio [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", email=" + email + "]";
+	}
+	
+	
+
+
 	
 	
 	

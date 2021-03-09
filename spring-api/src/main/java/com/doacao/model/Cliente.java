@@ -7,6 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity
 public class Cliente {
@@ -19,6 +23,7 @@ public class Cliente {
 	
 	@Column(nullable = false)
 	private String telefone;
+
 
 	public String getEmail() {
 		return email;
@@ -73,6 +78,12 @@ public class Cliente {
 	public String toString() {
 		return "Cliente [email=" + email + ", nome=" + nome + ", telefone=" + telefone + "]";
 	}
+
+
+
+	
+
+
 	
 	
 	
