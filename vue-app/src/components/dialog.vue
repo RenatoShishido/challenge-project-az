@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="center">
+  <v-row>
     <v-dialog v-model="dialog" max-width="290">
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -9,7 +9,6 @@
           :outlined="typeButton.outlined"
           :color="typeButton.color"
           :class="typeButton.class"
-          @click="defaultAction()"
         >
           <div v-if="!typeButton.icon">
             {{ typeButton.text }}
@@ -30,7 +29,7 @@
           <v-btn color="red darken-1" text @click="dialog = false">
             Discordo
           </v-btn>
-          <v-btn color="green darken-1" text @click="dialog = false">
+          <v-btn color="green darken-1" text @click="defaultAction">
             Concordo
           </v-btn>
         </v-card-actions>
@@ -43,12 +42,19 @@
 export default {
   props: {
     typeButton: {},
+    typeCliente: {}
   },
   data() {
     return {
       dialog: false,
     };
   },
+  methods: {
+      defaultAction() {
+      this.$emit("defaultAction", this.typeCliente.email);
+      this.dialog = false
+    },
+  }
 };
 </script>
 

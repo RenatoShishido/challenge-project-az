@@ -17,7 +17,7 @@
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-text-field
-                      v-model="fields.name"
+                      v-model="fields_cliente.nome"
                       :rules="defaultRules"
                       outlined
                       label="Name"
@@ -26,7 +26,7 @@
                   </v-col>
                   <v-col cols="12" md="6">
                     <v-text-field
-                      v-model="fields.telefone"
+                      v-model="fields_cliente.telefone"
                       :rules="telefoneRules"
                       outlined
                       label="Telefone"
@@ -35,17 +35,28 @@
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="fields.email"
+                      v-model="fields_cliente.email"
                       :rules="emailRules"
                       outlined
                       label="E-mail"
                       required
                     ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" class="d-flex justify-center">
                     <Button
-                      @defaultAction="push"
+                      @defaultAction="cadastrarCliente"
                       :typeButton="{
                         color: 'green',
-                        text: 'Continuar',
+                        text: 'Cadastrar',
+                        class: 'mr-4 white--text',
+                        outlined: 'outlined',
+                      }"
+                    />
+                    <Button
+                      @defaultAction="fields_cliente = {}"
+                      :typeButton="{
+                        color: 'red',
+                        text: 'LIMPAR',
                         class: 'mr-4 white--text',
                         outlined: 'outlined',
                       }"
@@ -67,16 +78,23 @@
                   </v-col>
                   <v-col cols="12">
                     <v-text-field
-                      v-model="fields.nomeUtensilio"
+                      v-model="fields_utensilio.nome"
                       outlined
                       :rules="defaultRules"
                       label="Nome Utensilio"
                       required
                     ></v-text-field>
+                    <v-text-field
+                      v-model="fields_utensilio.email"
+                      outlined
+                      :rules="emailRules"
+                      label="Email de Cadastro"
+                      required
+                    ></v-text-field>
                   </v-col>
                   <v-col cols="12">
                     <v-textarea
-                      v-model="fields.descricao"
+                      v-model="fields_utensilio.descricao"
                       outlined
                       :rules="defaultRules"
                       label="Descricao"
@@ -85,7 +103,7 @@
                   </v-col>
                   <v-col cols="12" class="d-flex justify-center">
                     <Button
-                      @defaultAction="cadastrarDoacao"
+                      @defaultAction="cadastrarUtensilio"
                       :typeButton="{
                         color: 'success',
                         text: 'CADASTRAR',
@@ -94,7 +112,7 @@
                       }"
                     />
                     <Button
-                      @defaultAction="cleanFields"
+                      @defaultAction="fields_utensilio = {}"
                       :typeButton="{
                         color: 'red',
                         text: 'LIMPAR',
@@ -133,6 +151,9 @@
 <script>
 import Table from "../components/tabela";
 import Button from "../components/botao";
+import clienteService from "../service/clienteService";
+import utensilioService from "../service/utensilioService";
+
 export default {
   name: "Administrador",
   components: {
@@ -140,7 +161,8 @@ export default {
     Button,
   },
   data: () => ({
-    fields: {},
+    fields_cliente: {},
+    fields_utensilio: {},
     panel: [],
     defaultRules: [(v) => !!v || "E necessario preencher o campo"],
     emailRules: [
@@ -150,12 +172,63 @@ export default {
     telefoneRules: [(v) => /([0-9])\w+/g.test(v) || "Apenas numeros"],
   }),
   methods: {
-    cleanFields() {
-      this.fields = {};
+    async cadastrarCliente() {
+      try {
+         await clienteService.listarClienteId(this.fields_cliente.email)
+         .then((response => {
+           response
+           this.$store.dispatch("snackbar/show", {
+            content: "Email ja cadastrado !",
+            color: "error",
+          });
+           this.fields_cliente = {};
+         }))
+         .catch(async err => {
+           err
+           await clienteService.criarCliente(this.fields_cliente);
+             this.$store.dispatch("snackbar/show", {
+            content: "Cliente gravado com sucesso!",
+            color: "green",
+          });
+           this.fields_cliente = {};
+         })
+        
+      } catch (error) {
+        this.$store.dispatch("snackbar/show", {
+          content: "Erro ao tentar gravar cliente!",
+          color: "error",
+        });
+        this.fields_cliente = {};
+      }
     },
-    push() {
-       this.panel = 1
-    }
+    async cadastrarUtensilio() {
+      try {
+        await clienteService.listarClienteId(this.fields_utensilio.email)
+        .then(async response => {
+          response
+          await utensilioService.criarUtensilio(this.fields_utensilio);
+          this.fields_utensilio = {};
+          this.$store.dispatch("snackbar/show", {
+            content: "Utensilio cadastrado!",
+            color: "green",
+          });
+        })
+        .catch(err => {
+          err
+          this.fields_utensilio = {};
+          this.$store.dispatch("snackbar/show", {
+            content: "Email nao cadastrado!",
+            color: "error",
+          });
+        })
+      } catch (error) {
+        this.$store.dispatch("snackbar/show", {
+          content: "Erro ao tentar gravar utensilio!",
+          color: "error",
+        });
+        this.fields_utensilio = {};
+      }
+    },
   },
 };
 </script>

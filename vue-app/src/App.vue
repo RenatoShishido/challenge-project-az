@@ -4,6 +4,7 @@
       <Error/>
     </v-app>
     <v-app v-else>
+      <SnackBar/>
       <Nav/>
       <Router-view/>
       <Footer/>
@@ -12,6 +13,7 @@
 </template>
 
 <script>
+import SnackBar from "./components/snackBar"
 import Error from "./views/Error"
 import Nav from "./components/navBar"
 import Footer from "./components/footer"
@@ -21,6 +23,7 @@ export default {
     Error,
     Nav,
     Footer,
+    SnackBar
   },
   computed: {
     showError() {
