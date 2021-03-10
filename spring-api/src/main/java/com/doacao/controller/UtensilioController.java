@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.doacao.model.Cliente;
 import com.doacao.model.Utensilio;
+import com.doacao.repository.ClienteRepository;
 import com.doacao.repository.UtensilioRepository;
 
 @RestController
@@ -27,8 +28,11 @@ public class UtensilioController {
 	@Autowired
 	private UtensilioRepository utensilioRepository;
 	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
 	@GetMapping("/utensilio")
-	public ResponseEntity<List<Utensilio>> listartAll()  {
+	public ResponseEntity<List<Utensilio>> listartAll(Pageable  pageable)  {
 		try {
 			List<Utensilio> utensilio = new ArrayList<Utensilio>();
 			
@@ -60,12 +64,29 @@ public class UtensilioController {
 	}
 	
 	@PostMapping("/utensilio")
-	public ResponseEntity<Utensilio> adicionar(@RequestBody Utensilio utensilio)  {
+	public Utensilio adicionar(@RequestBody Utensilio utensilio) throws Exception  {
 		try {
-			return new ResponseEntity<>(utensilioRepository.save(utensilio),HttpStatus.CREATED);
+			
+			if(clienteRepository.findById(utensilio.getCliente_id()).isEmpty()) {
+				throw new Exception("Email precisa estar cadastrado");
+			}
+			
+			if(utensilio.getNome() == null && utensilio.getDescricao() == null) {
+				throw new Exception("Precisa preencher os campos");
+			}
+			
+			if(utensilio.getNome() == null) {
+				throw new Exception("Precisa preencher o nome");
+			}
+			
+			if(utensilio.getDescricao() == null) {
+				throw new Exception("Precisa preencher a descricao");
+			}
+			
+			return utensilioRepository.save(utensilio);
 			
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new Exception(e.getMessage());
 		}
 	}
 	

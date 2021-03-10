@@ -3,6 +3,7 @@ package com.doacao.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +25,7 @@ public class Utensilio {
 	private String descricao;
 	
 	@Column(nullable = false)
-	private String email;
+	private String cliente_id;
 	
 
 	@Override
@@ -76,18 +77,27 @@ public class Utensilio {
 		this.descricao = descricao;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getCliente_id() {
+		return cliente_id;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setCliente_id(String cliente_id) {
+		this.cliente_id = cliente_id;
 	}
 
 	@Override
 	public String toString() {
-		return "Utensilio [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", email=" + email + "]";
+		return "Utensilio [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", cliente_id=" + cliente_id
+				+ "]";
 	}
+
+	
+
+	
+
+
+
+
 	
 	
 

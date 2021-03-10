@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import com.doacao.model.Cliente;
 import com.doacao.repository.ClienteRepository;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,63 +27,89 @@ public class ClienteController {
 	private ClienteRepository clienteRepository;
 	
 	@GetMapping("/administrador")
-	public ResponseEntity<List<Cliente>> listartAll()  {
+	public List<Cliente> listartAll() throws Exception {
 		try {
-			List<Cliente> clientes = new ArrayList<Cliente>();
+			List<Cliente> cliente =  clienteRepository.findAll();
 			
-			clienteRepository.findAll().forEach(clientes::add);
-			
-			if(clientes.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			if( cliente.isEmpty()) {
+				throw new Exception("Lista de Clinetes vazia");
 			}
+			return cliente;
 			
-			return new ResponseEntity<>(clientes, HttpStatus.OK);
+			
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new IOException(e.getMessage());
 		}
-		
+	
 	}
 	
 	@GetMapping("/administrador/{id}")
-	public ResponseEntity<Cliente> listartId(@PathVariable("id") String email)  {
+	public Cliente listartId(@PathVariable("id") String email) throws Exception  {
 		try {
 			Optional<Cliente> clienteData = clienteRepository.findById(email);
 			 if (clienteData.isPresent()) {
-			      return new ResponseEntity<>(clienteData.get(), HttpStatus.OK);
+			      return clienteData.get();
 			  } else {
-			      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+				  throw new Exception("Erro ao procurar cliente com email: " + email);
 			 }
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new IOException(e.getMessage());
 		}
 	}
 	
+	
 	@PostMapping("/administrador")
-	public ResponseEntity<Cliente> adicionar(@RequestBody Cliente cliente)  {
+	public Cliente adicionar(@RequestBody Cliente cliente) throws Exception  {
 		try {
-			if(!clienteRepository.findById(cliente.getEmail()).isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+
+			if(cliente.getEmail() == null && cliente.getNome() == null && cliente.getTelefone() == null) {
+				throw new Exception("Precisa preencher os campos");
 			}
+			
+			if(cliente.getEmail() == null) {
+				throw new Exception("Precisa preencher o email");
+			}
+			
+			if(!clienteRepository.findById(cliente.getEmail()).isEmpty()) {
+				throw new Exception("Email ja cadastrado");
+			}
+			
+			if(cliente.getEmail().indexOf('@') < 0) {
+				throw new Exception("O email precisa ser valido");
+			}
+			
+			if(cliente.getNome() == null) {
+				throw new Exception("Precisa preencher o nome");
+			}
+			if(cliente.getTelefone() == null) {
+				throw new Exception("Precisa preencher o telefone");
+			}
+			
+			if(!cliente.getTelefone().matches("[0-9]*")) {
+				throw new Exception("O telefone precisa ser numero");
+			}
+			
+			
 			Cliente _cliente = clienteRepository.save(cliente);
 			
-			return new ResponseEntity<>(_cliente,HttpStatus.CREATED);
+			return _cliente;
 			
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new IOException(e.getMessage());
 		}
 	}
 	
 	 @PutMapping("/administrador/{id}")
-	  public ResponseEntity<Cliente> updateTutorial(@PathVariable("id") String email, @RequestBody Cliente cliente) {
+	  public Cliente updateTutorial(@PathVariable("id") String email, @RequestBody Cliente cliente) throws Exception {
 		 Optional<Cliente> clienteData = clienteRepository.findById(email);
 
 	    if (clienteData.isPresent()) {
 	      Cliente _cliente = clienteData.get();
 	      _cliente.setNome(cliente.getNome());
 	      _cliente.setTelefone(cliente.getTelefone());
-	      return new ResponseEntity<>(clienteRepository.save(_cliente), HttpStatus.OK);
+	      return clienteRepository.save(_cliente);
 	    } else {
-	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    	throw new Exception("Erro ao atualizar Cliente");
 	    }
 	  }
 	
