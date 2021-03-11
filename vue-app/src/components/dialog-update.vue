@@ -24,13 +24,14 @@
         <v-container>
           <h1 class="d-flex justify-center display-1 my-4">Atualizar Cliente</h1>
           <v-text-field
-            v-model="fields.nome"
+            v-model="typeCliente.nome"
             outlined
             label="Nome"
             required
           ></v-text-field>
           <v-text-field
-            v-model="fields.telefone"
+            v-model="typeCliente.telefone"
+            v-mask="'(##) #####-####'"
             outlined
             label="Telefone"
             required
@@ -63,7 +64,7 @@ export default {
   },
   methods: {
     defaultAction() {
-      this.$emit("defaultAction", this.fields, this.typeCliente.email);
+      this.$emit("defaultAction", this.typeCliente, this.typeCliente.email);
       this.dialog = false
     },
   }

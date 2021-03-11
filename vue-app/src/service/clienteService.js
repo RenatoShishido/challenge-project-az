@@ -1,9 +1,9 @@
 import AXIOS_INSTANCE from "./config";
 
 class ClienteService {
-  static async listarClientes() {
+  static async listarClientes(size, page) {
     try {
-      const response = await AXIOS_INSTANCE.get(`/api/administrador`);
+      const response = await AXIOS_INSTANCE.get(`/api/administrador?size=${size}&page=${page}`);
 
       return response.data;
     } catch (err) {

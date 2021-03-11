@@ -127,7 +127,20 @@
                 <v-container>
                   <v-row align="center">
                     <v-col cols="12">
-                      <Table :clientes="clientes" />
+                      <Table
+                        :clientes="clientes"
+                        @alterarCliente="alterarCliente"
+                        @removerCliente="removerCliente"
+                      />
+                      <div class="text-center py-10">
+                        <a @click="listarClientes()">
+                          <v-pagination
+                            v-model="page"
+                            :length="conteudo.totalPages"
+                            circle
+                          ></v-pagination>
+                        </a>
+                      </div>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -154,6 +167,9 @@ export default {
   },
   data: () => ({
     clientes: {},
+    conteudo: {},
+    size: 2,
+    page: 1,
     fields_cliente: {},
     fields_utensilio: {},
     panel: [],
@@ -170,7 +186,8 @@ export default {
   methods: {
     async listarClientes() {
       try {
-        this.clientes = await clienteService.listarClientes();
+        this.conteudo = await clienteService.listarClientes(this.size, this.page - 1);
+        this.clientes = this.conteudo.content
       } catch (error) {
         error;
       }
@@ -182,6 +199,7 @@ export default {
           content: "Cliente gravado com sucesso!",
           color: "green",
         });
+
         this.fields_cliente = {};
         this.panel = 1;
         this.listarClientes();
@@ -208,6 +226,39 @@ export default {
           color: "error",
         });
         this.fields_utensilio = {};
+      }
+    },
+    async alterarCliente(content, id) {
+      try {
+        confirm("Voce tem certeza que deseja alterar esse anuncio");
+        await clienteService.updateCliente(id, content);
+
+        this.listarClientes();
+
+        this.$store.dispatch("snackbar/show", {
+          content: "Cliente Atualizado com sucesso!",
+          color: "green",
+        });
+      } catch (error) {
+        error;
+      }
+    },
+    async removerCliente(id) {
+      try {
+        await clienteService.removeCliente(id);
+
+        this.listarClientes();
+
+        this.$store.dispatch("snackbar/show", {
+          content: "Cliente removido com sucesso!",
+          color: "green",
+        });
+      } catch (error) {
+        error;
+        this.$store.dispatch("snackbar/show", {
+          content: "Erro ao remover cliente!",
+          color: "error",
+        });
       }
     },
   },

@@ -40,7 +40,6 @@
 <script>
 import DialogUpdate from "./dialog-update.vue";
 import Dialog from "./dialog";
-import clienteService from "../service/clienteService";
 export default {
   props: {
     clientes: {},
@@ -49,52 +48,12 @@ export default {
     DialogUpdate,
     Dialog,
   },
-  mounted() {
-    this.listarClientes();
-  },
   methods: {
-    async listarClientes() {
-      try {
-        this.clientes = await clienteService.listarClientes(
-          this.size,
-          this.page
-        );
-      } catch (error) {
-        error;
-      }
-    },
     async alterarCliente(content, id) {
-      try {
-        confirm("Voce tem certeza que deseja alterar esse anuncio");
-        await clienteService.updateCliente(id, content);
-
-        this.listarClientes();
-
-        this.$store.dispatch("snackbar/show", {
-          content: "Cliente Atualizado com sucesso!",
-          color: "green",
-        });
-      } catch (error) {
-        error;
-      }
+      this.$emit("alterarCliente", content, id)
     },
     async removerCliente(id) {
-      try {
-        await clienteService.removeCliente(id);
-
-        this.listarClientes();
-
-        this.$store.dispatch("snackbar/show", {
-          content: "Cliente removido com sucesso!",
-          color: "green",
-        });
-      } catch (error) {
-        error;
-        this.$store.dispatch("snackbar/show", {
-          content: "Erro ao remover cliente!",
-          color: "error",
-        });
-      }
+      this.$emit("removerCliente", id)
     },
   },
 };

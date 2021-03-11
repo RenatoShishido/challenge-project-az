@@ -64,7 +64,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
-					<finalName>user-mysql</finalName>
+					<finalName>doacao-api</finalName>
 				</configuration>
 			</plugin>
 		</plugins>

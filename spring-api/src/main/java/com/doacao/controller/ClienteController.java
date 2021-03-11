@@ -1,6 +1,8 @@
 package com.doacao.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,9 +29,9 @@ public class ClienteController {
 	private ClienteRepository clienteRepository;
 	
 	@GetMapping("/administrador")
-	public List<Cliente> listartAll() throws Exception {
+	public Page<Cliente> listartAll(Pageable pageable) throws Exception {
 		try {
-			List<Cliente> cliente =  clienteRepository.findAll();
+			Page<Cliente> cliente =  clienteRepository.findAll(pageable);
 			
 			if( cliente.isEmpty()) {
 				throw new Exception("Lista de Clinetes vazia");
@@ -85,9 +87,6 @@ public class ClienteController {
 				throw new Exception("Precisa preencher o telefone");
 			}
 			
-			if(!cliente.getTelefone().matches("[0-9]*")) {
-				throw new Exception("O telefone precisa ser numero");
-			}
 			
 			
 			Cliente _cliente = clienteRepository.save(cliente);
