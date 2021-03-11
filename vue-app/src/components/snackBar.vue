@@ -1,0 +1,10 @@
+<template>
+  <v-snackbar
+    v-model="$store.state.snackbar.snack"
+    :timeout="4000"
+    :color="$store.state.snackbar.color"
+    top
+  >
+    <span>{{$store.state.snackbar.content}}</span>
+  </v-snackbar>
+</template>
