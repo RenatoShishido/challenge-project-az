@@ -1,9 +1,10 @@
 import AXIOS_INSTANCE from "./config";
 
 class UtensilioService {
-  static async listarUtensilios() {
+  static async listarUtensilios(size, page) {
     try {
-      const response = await AXIOS_INSTANCE.get("/api/utensilio");
+
+      const response = await AXIOS_INSTANCE.get(`/api/utensilio?size=${size}&page=${page}`);
 
       return response.data;
     } catch (err) {

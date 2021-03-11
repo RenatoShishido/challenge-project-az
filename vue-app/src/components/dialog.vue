@@ -42,7 +42,7 @@
 export default {
   props: {
     typeButton: {},
-    typeCliente: {}
+    typeCliente: {},
   },
   data() {
     return {

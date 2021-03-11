@@ -1,18 +1,18 @@
 <template>
   <v-container>
-    <v-row v-for="item in items" :key="item.key">
-      <v-col md="2">
-        {{ item.nome }}
+    <v-row v-for="cliente in clientes" :key="cliente.key">
+      <v-col cols="2">
+        {{ cliente.nome }}
       </v-col>
-      <v-col md="2">
-        {{ item.telefone }}
+      <v-col cols="2">
+        {{ cliente.telefone }}
       </v-col>
-      <v-col md="5">
-        {{ item.email }}
+      <v-col cols="5">
+        {{ cliente.email }}
       </v-col>
-      <v-col md="1">
+      <v-col cols="1">
         <DialogUpdate
-          :typeCliente="item"
+          :typeCliente="cliente"
           @defaultAction="alterarCliente"
           :typeButton="{
             color: 'green',
@@ -24,7 +24,7 @@
       </v-col>
       <v-col md="1">
         <Dialog
-          :typeCliente="item"
+          :typeCliente="cliente"
           @defaultAction="removerCliente"
           :typeButton="{
             color: 'red',
@@ -42,18 +42,12 @@ import DialogUpdate from "./dialog-update.vue";
 import Dialog from "./dialog";
 import clienteService from "../service/clienteService";
 export default {
+  props: {
+    clientes: {},
+  },
   components: {
     DialogUpdate,
     Dialog,
-  },
-  data() {
-    return {
-      search: "",
-      filter: {},
-      page: 1,
-      sortBy: "name",
-      items: [],
-    };
   },
   mounted() {
     this.listarClientes();
@@ -61,17 +55,17 @@ export default {
   methods: {
     async listarClientes() {
       try {
-        this.items = await clienteService.listarClientes();
+        this.clientes = await clienteService.listarClientes(
+          this.size,
+          this.page
+        );
       } catch (error) {
         error;
-        this.$store.dispatch("snackbar/show", {
-          content: "Erro ao listar cliente!",
-          color: "error",
-        });
       }
     },
     async alterarCliente(content, id) {
       try {
+        confirm("Voce tem certeza que deseja alterar esse anuncio");
         await clienteService.updateCliente(id, content);
 
         this.listarClientes();
@@ -82,10 +76,6 @@ export default {
         });
       } catch (error) {
         error;
-        this.$store.dispatch("snackbar/show", {
-          content: "Erro ao alterar cliente!",
-          color: "error",
-        });
       }
     },
     async removerCliente(id) {
