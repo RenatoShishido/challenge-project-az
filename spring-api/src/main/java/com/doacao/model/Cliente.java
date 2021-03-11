@@ -1,7 +1,9 @@
 package com.doacao.model;
 
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -75,10 +77,13 @@ public class Cliente {
 		return true;
 	}
 
+
 	@Override
 	public String toString() {
 		return "Cliente [email=" + email + ", nome=" + nome + ", telefone=" + telefone + "]";
 	}
+
+	
 
 
 

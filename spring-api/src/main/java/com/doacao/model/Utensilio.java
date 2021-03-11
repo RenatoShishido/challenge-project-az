@@ -3,19 +3,21 @@ package com.doacao.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.springframework.data.jpa.repository.Query;
+
+
 
 @Entity
 public class Utensilio {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
 	@Column(nullable = false)
@@ -23,6 +25,9 @@ public class Utensilio {
 	
 	@Column(nullable = false)
 	private String descricao;
+	
+	@Column
+	private Boolean adquirido;
 	
 	@Column(nullable = false)
 	private String cliente_id;
@@ -77,6 +82,14 @@ public class Utensilio {
 		this.descricao = descricao;
 	}
 
+	public Boolean getAdquirido() {
+		return adquirido;
+	}
+
+	public void setAdquirido(Boolean adquirido) {
+		this.adquirido = adquirido;
+	}
+
 	public String getCliente_id() {
 		return cliente_id;
 	}
@@ -87,9 +100,12 @@ public class Utensilio {
 
 	@Override
 	public String toString() {
-		return "Utensilio [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", cliente_id=" + cliente_id
-				+ "]";
+		return "Utensilio [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", adquirido=" + adquirido
+				+ ", cliente_id=" + cliente_id + "]";
 	}
+
+	
+
 
 	
 

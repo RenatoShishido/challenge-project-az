@@ -8,6 +8,7 @@ CREATE TABLE utensilio (
 	id serial PRIMARY KEY,
 	nome varchar(50) NOT NULL,
 	descricao varchar(255) NOT NULL,
+	adquirido Boolean,
 	cliente_id varchar(100)
 	);
 	
@@ -16,3 +17,4 @@ ALTER TABLE utensilio
 	    FOREIGN KEY (cliente_id)
 	    REFERENCES cliente(email)
 	    ON DELETE CASCADE ON UPDATE NO ACTION;
+	    

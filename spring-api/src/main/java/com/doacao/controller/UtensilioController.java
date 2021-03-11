@@ -1,11 +1,13 @@
 package com.doacao.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.doacao.model.Utensilio;
 import com.doacao.repository.ClienteRepository;
 import com.doacao.repository.UtensilioRepository;
@@ -32,21 +33,14 @@ public class UtensilioController {
 	private ClienteRepository clienteRepository;
 	
 	@GetMapping("/utensilio")
-	public ResponseEntity<List<Utensilio>> listartAll(Pageable  pageable)  {
+	public  Page<Utensilio> listartAll(Pageable pageable) throws Exception  {
 		try {
-			List<Utensilio> utensilio = new ArrayList<Utensilio>();
+			return  utensilioRepository.findAll(pageable);
 			
-			utensilioRepository.findAll().forEach(utensilio::add);
 			
-			if(utensilio.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
-			
-			return new ResponseEntity<>(utensilio, HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			throw new Exception(e.getMessage()); 
 		}
-		
 	}
 	
 	@GetMapping("/utensilio/{id}")
@@ -98,6 +92,7 @@ public class UtensilioController {
 	      Utensilio _utensilio = utensilioData.get();
 	      _utensilio.setNome(utensilio.getNome());
 	      _utensilio.setDescricao(utensilio.getDescricao());
+	      _utensilio.setAdquirido(utensilio.getAdquirido());
 	      return new ResponseEntity<>(utensilioRepository.save(_utensilio), HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
