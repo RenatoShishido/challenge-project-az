@@ -7,13 +7,13 @@
 &nbsp;
 ## (FRONTEND)
 
-### Inciar o setup do projeto (PORT 8080)
+### Inciar o setup do projeto 
 
 ```
 npm install
 ```
 
-### Compilar e executar o codigo
+### Compilar e executar o codigo (PORT 8080)
 
 ```
 npm run serve
