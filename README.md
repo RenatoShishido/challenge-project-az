@@ -26,13 +26,8 @@ npm run serve
 &nbsp;
 ## (BACKEND)
 ### Inciar o setup do projeto (PORT 3000)
-Voce precisa importar o projeto na sua IDE ou executar o arquivo executavel .jar no terminal
+Voce precisa importar o projeto na sua IDE para rodar o projeto
 
-### Compilar e executar o codigo no terminal com arquivo .jar
-
-```
-java -jar doacao-api.jar
-```
 ### Alterer as configuracoes de banco de dados no arquivo application.properties
 Mudando para a URL, usuario e senha do seu banco.
 ```
