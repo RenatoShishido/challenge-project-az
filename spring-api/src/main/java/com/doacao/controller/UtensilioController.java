@@ -61,12 +61,11 @@ public class UtensilioController {
 	public Utensilio adicionar(@RequestBody Utensilio utensilio) throws Exception  {
 		try {
 			
-			if(clienteRepository.findById(utensilio.getCliente_id()).isEmpty()) {
-				throw new Exception("Email precisa estar cadastrado");
-			}
-			
-			if(utensilio.getNome() == null && utensilio.getDescricao() == null) {
+			if(utensilio.getNome() == null && utensilio.getDescricao() == null && utensilio.getCliente_id() == null) {
 				throw new Exception("Precisa preencher os campos");
+			}
+			if(utensilio.getCliente_id() == null) {
+				throw new Exception("Precisa preencher o email");
 			}
 			
 			if(utensilio.getNome() == null) {
@@ -76,6 +75,12 @@ public class UtensilioController {
 			if(utensilio.getDescricao() == null) {
 				throw new Exception("Precisa preencher a descricao");
 			}
+			
+			if(clienteRepository.findById(utensilio.getCliente_id()).isEmpty()) {
+				throw new Exception("Email precisa estar cadastrado");
+			}
+			
+			
 			
 			return utensilioRepository.save(utensilio);
 			

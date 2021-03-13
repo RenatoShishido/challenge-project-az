@@ -204,7 +204,6 @@ export default {
         this.panel = 1;
         this.listarClientes();
       } catch (error) {
-        console.log();
         this.$store.dispatch("snackbar/show", {
           content: error.message,
           color: "error",

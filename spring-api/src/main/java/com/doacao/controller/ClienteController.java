@@ -94,7 +94,7 @@ public class ClienteController {
 			return _cliente;
 			
 		} catch (Exception e) {
-			throw new IOException(e.getMessage());
+			throw new Exception(e.getMessage());
 		}
 	}
 	
